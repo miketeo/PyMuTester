@@ -1,0 +1,119 @@
+-        if f1() and 1 > 2: pass
++        #Mutant#  if f1() and 1 > 2: pass
++        if (not (f1() and (1 > 2))): pass
+##
+##
+##
+-        if f1() and 1 > 2: f2()
++        #Mutant#  if f1() and 1 > 2: f2()
++        if (not (f1() and (1 > 2))): f2()
+##
+##
+##
+-        if f1() and 1> 2: f2(); f3(); a = a+1
++        #Mutant#  if f1() and 1> 2: f2(); f3(); a = a+1
++        if (not (f1() and (1 > 2))): f2(); f3(); a = a + 1
+##
+##
+##
+-        if f1():
++        #Mutant#  if f1():
++        if (not f1()):
+##
+##
+##
+-        if f1() and 1 > 2:
++        #Mutant#  if f1() and 1 > 2:
++        if (not (f1() and (1 > 2))):
+##
+##
+##
+-        if f1() or 2 > 3:
++        #Mutant#  if f1() or 2 > 3:
++        if (not (f1() or (2 > 3))):
+##
+##
+##
+-        if f1() and 3 > 4:
++        #Mutant#  if f1() and 3 > 4:
++        if (not (f1() and (3 > 4))):
+##
+##
+##
+-        if f1() and 4 == 5:
++        #Mutant#  if f1() and 4 == 5:
++        if (not (f1() and (4 == 5))):
+##
+##
+##
+-        if\
+-        f1() and 5 <= 6:
++        #Mutant#  if\
++        #Mutant#  f1() and 5 <= 6:
++        if (not (f1() and (5 <= 6))):
+##
+##
+##
+-            if f11() and 6 > 7:
++            #Mutant#  if f11() and 6 > 7:
++            if (not (f11() and (6 > 7))):
+##
+##
+##
+-            if f15():
++            #Mutant#  if f15():
++            if (not f15()):
+##
+##
+##
+-                if f16():
++                #Mutant#  if f16():
++                if (not f16()):
+##
+##
+##
+-                    if f17():
++                    #Mutant#  if f17():
++                    if (not f17()):
+##
+##
+##
+-                elif 2 > 3:
++                #Mutant#  elif 2 > 3:
++                elif (not (2 > 3)):
+##
+##
+##
+-            elif 4 > 5:
++            #Mutant#  elif 4 > 5:
++            elif (not (4 > 5)):
+##
+##
+##
+-            elif 5 > 6:
++            #Mutant#  elif 5 > 6:
++            elif (not (5 > 6)):
+##
+##
+##
+-        elif not \
+-            f2():
++        #Mutant#  elif not \
++        #Mutant#      f2():
++        elif (not (not f2())):
+##
+##
+##
+-            if f11():
++            #Mutant#  if f11():
++            if (not f11()):
+##
+##
+##
+-        elif \
+-            f3() and f4() \
+-            or f5():
++        #Mutant#  elif \
++        #Mutant#      f3() and f4() \
++        #Mutant#      or f5():
++        elif (not ((f3() and f4()) or f5())):

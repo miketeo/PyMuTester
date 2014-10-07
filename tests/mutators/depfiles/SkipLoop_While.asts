@@ -1,0 +1,41 @@
++    from mutester.public import mutest_statement_reached
+-        pass
++        if (mutest_statement_reached() % 2 == 0):
++            continue
+##
+##
+##
++    from mutester.public import mutest_statement_reached
+-        pass
++        if (mutest_statement_reached() % 2 == 0):
++            continue
+##
+##
+##
++    from mutester.public import mutest_statement_reached
++        if (mutest_statement_reached() % 2 == 0):
++            continue
+##
+##
+##
++    from mutester.public import mutest_statement_reached
++        if (mutest_statement_reached() % 2 == 0):
++            continue
+##
+##
+##
++    from mutester.public import mutest_statement_reached
++        if (mutest_statement_reached() % 2 == 0):
++            continue
+##
+##
+##
++    from mutester.public import mutest_statement_reached
++        if (mutest_statement_reached() % 2 == 0):
++            continue
+##
+##
+##
++    from mutester.public import mutest_statement_reached
++            if (mutest_statement_reached() % 2 == 0):
++                continue

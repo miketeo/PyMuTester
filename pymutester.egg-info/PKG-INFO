@@ -1,0 +1,26 @@
+Metadata-Version: 1.0
+Name: pymutester
+Version: 0.1.0
+Summary: Python Mutant Tester (PyMuTester) facilitates mutant testing for python applications
+Home-page: http://miketeo.net/wp/index.php/projects/python-mutant-testing-pymutester
+Author: Michael Teo
+Author-email: miketeo@miketeo.net
+License: Apache License version 2.0
+Description: PyMuTester is tool to facilitate Mutant Testing (a.k.a Mutant Analysis or Program Mutation)
+        on software systems written in Python. Its main purpose is to assist you in improving your
+        existing unit tests to cover missing checks and "loopholes" in your testing.
+        It works by making small changes (technically known as mutants) to your Python application's
+        source code and re-run your unit tests over these mutated application source code. Since the
+        mutants usually go against the specifications, your unit tests should fail in such tests.
+        If the unit tests still pass, then that is an indication that your unit tests might have
+        missed out some checks!
+        
+        Please visit http://miketeo.net/wp/index.php/projects/python-mutant-testing-pymutester
+        for more details on how to use PyMuTester in your testing.
+        
+Keywords: mutant unit testing
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Testing
+Classifier: License :: OSI Approved :: Apache Software License

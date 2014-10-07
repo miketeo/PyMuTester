@@ -1,0 +1,137 @@
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 0.064s
+
+OK
+
+*************************
+Starting mutation test...
+*************************
+Mutating ParsingError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:206)...
+Mutating NoOptionError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:161)...
+Mutating ParsingError.append (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:211)...
+Mutating RawConfigParser.has_option (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:373)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+Mutating DuplicateSectionError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:154)...
+Mutating InterpolationDepthError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:195)...
+Mutating RawConfigParser.readfp (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:307)...
+*** IFNOT-1... Mutant killed
+Mutating RawConfigParser._read (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:462)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+*** IFNOT-3... Mutant killed
+*** IFNOT-4... Mutant killed
+*** IFNOT-5... Mutant killed
+*** IFNOT-6... Mutant killed
+*** IFNOT-7... Mutant killed
+*** IFNOT-8... Mutant killed
+*** IFNOT-9... Mutant killed
+*** IFNOT-10... Mutant killed
+*** IFNOT-11... Mutant killed
+*** IFNOT-12... Mutant killed
+*** IFNOT-13... Mutant killed
+*** IFNOT-14... Mutant killed
+*** IFNOT-15... Mutant killed
+*** IFNOT-16... Mutant killed
+*** SKIPLOOP-1... Mutant killed
+Mutating RawConfigParser.add_section (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:250)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+Mutating RawConfigParser.read (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:282)...
+*** IFNOT-1... Mutant killed
+*** SKIPLOOP-1... Mutant killed
+Mutating RawConfigParser.set (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:385)...
+*** IFNOT-1... Mutant killed
+Mutating NoSectionError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:147)...
+Mutating RawConfigParser.remove_option (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:414)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+Mutating InterpolationError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:170)...
+Mutating RawConfigParser.sections (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:245)...
+Mutating RawConfigParser.has_section (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:264)...
+Mutating Error._set_message (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:125)...
+Mutating SafeConfigParser._interpolate_some (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:649)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+*** IFNOT-3... Mutant killed
+*** IFNOT-4... Mutant killed
+*** IFNOT-5... Mutant killed
+*** IFNOT-6... Mutant killed
+*** IFNOT-7... Mutant killed
+*** SKIPLOOP-1... Mutant killed
+Mutating RawConfigParser.optionxform (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:370)...
+Mutating MissingSectionHeaderError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:218)...
+Mutating RawConfigParser.write (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:396)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+*** IFNOT-3... Mutant killed
+*** SKIPLOOP-1... Mutant killed
+*** SKIPLOOP-2... Mutant killed
+*** SKIPLOOP-3... Mutant killed
+Mutating RawConfigParser.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:229)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+*** SKIPLOOP-1... Mutant killed
+Mutating RawConfigParser.options (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:271)...
+*** IFNOT-1... Mutant killed
+Mutating InterpolationMissingOptionError.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:178)...
+Mutating Error.__init__ (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:135)...
+Mutating RawConfigParser.getboolean (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:364)...
+*** IFNOT-1... Mutant killed
+Mutating Error._get_message (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:120)...
+Mutating ConfigParser.items (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:578)...
+*** IFNOT-1... Mutant not reached
+--- /home/pip/PyMuTester/tests/mock_modules/ConfigParser.py (original)
++++ /home/pip/PyMuTester/tests/mock_modules/ConfigParser.py (mutant-IFNOT-1)
+@@ -591,7 +591,8 @@
+         try:
+             d.update(self._sections[section])
+         except KeyError:
+-            if section != DEFAULTSECT:
++            if (not (section != DEFAULTSECT)):
+                 raise NoSectionError(section)
+         # Update with the entry specific variables
+         if vars:
+*** IFNOT-2... Mutant killed
+*** IFNOT-3... Mutant killed
+*** IFNOT-4... Mutant killed
+*** SKIPLOOP-1... Mutant not reached
+--- /home/pip/PyMuTester/tests/mock_modules/ConfigParser.py (original)
++++ /home/pip/PyMuTester/tests/mock_modules/ConfigParser.py (mutant-SKIPLOOP-1)
+@@ -595,7 +595,9 @@
+                 raise NoSectionError(section)
+         # Update with the entry specific variables
+         if vars:
+-            for key, value in vars.items():
++            for (key, value) in vars.items():
++                if mutest_statement_reached() % 2 == 0: continue
+                 d[self.optionxform(key)] = value
+         options = d.keys()
+         if "__name__" in options:
+Mutating SafeConfigParser.set (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:687)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+*** IFNOT-3... Mutant killed
+Mutating ConfigParser.get (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:546)...
+*** IFNOT-1... Mutant killed
+*** IFNOT-2... Mutant killed
+*** IFNOT-3... Mutant killed
+*** SKIPLOOP-1... Mutant not reached
+--- /home/pip/PyMuTester/tests/mock_modules/ConfigParser.py (original)
++++ /home/pip/PyMuTester/tests/mock_modules/ConfigParser.py (mutant-SKIPLOOP-1)
+@@ -562,7 +562,9 @@
+                 raise NoSectionError(section)
+         # Update with the entry specific variables
+         if vars:
+-            for key, value in vars.items():
++            for (key, value) in vars.items():
++                if mutest_statement_reached() % 2 == 0: continue
+                 d[self.optionxform(key)] = value
+         option = self.optionxform(option)
+         try:
+Mutating SafeConfigParser._interpolate (/home/pip/PyMuTester/tests/mock_modules/ConfigParser.py:641)...
+
+Mutant Test Results
+Total: 58
+	Alive: 0 (0.0%)	Killed: 55 (94.8%)	Unreachable: 3 (5.2%)

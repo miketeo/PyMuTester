@@ -1,0 +1,52 @@
+-    for a in range(0, 10): pass
++    #Mutant#  for a in range(0, 10): pass
++    for a in range(0, 10):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    for b in [ 1, 2, 3, 4, 5 ]:
+-        pass
++    #Mutant#  for b in [ 1, 2, 3, 4, 5 ]:
++    #Mutant#      pass
++    for b in [1, 2, 3, 4, 5]:
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    for c in ( 1, 2, 3, 4, 5 ): s1(); s2()
++    #Mutant#  for c in ( 1, 2, 3, 4, 5 ): s1(); s2()
++    for c in (1, 2, 3, 4, 5):
++        if mutest_statement_reached() % 2 == 0: continue
++        s1()
++        s2()
+##
+##
+##
++    #Mutant#  for d in range(10, 20):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    for e1, e2 \
+-        in [ ( 1, 1 ), \
+-             ( 2, 2 ) ]:
++    #Mutant#  for e1, e2 \
++    #Mutant#      in [ ( 1, 1 ), \
++    #Mutant#           ( 2, 2 ) ]:
++    for (e1, e2) in [(1, 1), (2, 2)]:
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
++    #Mutant#  for f in range(20, 30):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-        for g in \
+-            [ 20, 30, 40, 50 ]:
++        #Mutant#  for g in \
++        #Mutant#      [ 20, 30, 40, 50 ]:
++        for g in [20, 30, 40, 50]:
++            if mutest_statement_reached() % 2 == 0: continue

@@ -1,0 +1,111 @@
+-        if (f1() and (1 > 2)):
++        from mutester.public import mutest_statement_reached
++        if (mutest_statement_reached() or (not (f1() and (1 > 2)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() and (1 > 2)):
++        if (mutest_statement_reached() or (not (f1() and (1 > 2)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() and (1 > 2)):
++        if (mutest_statement_reached() or (not (f1() and (1 > 2)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if f1():
++        if (mutest_statement_reached() or (not f1())):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() and (1 > 2)):
++        if (mutest_statement_reached() or (not (f1() and (1 > 2)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() or (2 > 3)):
++        if (mutest_statement_reached() or (not (f1() or (2 > 3)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() and (3 > 4)):
++        if (mutest_statement_reached() or (not (f1() and (3 > 4)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() and (4 == 5)):
++        if (mutest_statement_reached() or (not (f1() and (4 == 5)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        if (f1() and (5 <= 6)):
++        if (mutest_statement_reached() or (not (f1() and (5 <= 6)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-            if (f11() and (6 > 7)):
++            if (mutest_statement_reached() or (not (f11() and (6 > 7)))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-            if f15():
++            if (mutest_statement_reached() or (not f15())):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-                if f16():
++                if (mutest_statement_reached() or (not f16())):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-                    if f17():
++                    if (mutest_statement_reached() or (not f17())):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-                elif (2 > 3):
++                elif (mutest_statement_reached() or (not (2 > 3))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-            elif (4 > 5):
++            elif (mutest_statement_reached() or (not (4 > 5))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-            elif (5 > 6):
++            elif (mutest_statement_reached() or (not (5 > 6))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        elif (not f2()):
++        elif (mutest_statement_reached() or (not (not f2()))):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-            if f11():
++            if (mutest_statement_reached() or (not f11())):
+##
+##
+##
++        from mutester.public import mutest_statement_reached
+-        elif ((f3() and f4()) or f5()):
++        elif (mutest_statement_reached() or (not ((f3() and f4()) or f5()))):

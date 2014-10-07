@@ -1,0 +1,56 @@
+-    while 1 > 2 and 2 > 3: pass
++    #Mutant#  while 1 > 2 and 2 > 3: pass
++    while ((1 > 2) and (2 > 3)):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    while 2 > 3 and 4 > 5:
+-        pass
++    #Mutant#  while 2 > 3 and 4 > 5:
++    #Mutant#      pass
++    while ((2 > 3) and (4 > 5)):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    while 3 > 4 or 5 > 6: s1(); s2()
++    #Mutant#  while 3 > 4 or 5 > 6: s1(); s2()
++    while ((3 > 4) or (5 > 6)):
++        if mutest_statement_reached() % 2 == 0: continue
++        s1()
++        s2()
+##
+##
+##
+-    while 4 > 5 or 5 > 6:
++    #Mutant#  while 4 > 5 or 5 > 6:
++    while ((4 > 5) or (5 > 6)):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    while \
+-        5 > 6 \
+-        or 6 > 7:
++    #Mutant#  while \
++    #Mutant#      5 > 6 \
++    #Mutant#      or 6 > 7:
++    while ((5 > 6) or (6 > 7)):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-    while 10 > 20 and 20 > 30:
++    #Mutant#  while 10 > 20 and 20 > 30:
++    while ((10 > 20) and (20 > 30)):
++        if mutest_statement_reached() % 2 == 0: continue
+##
+##
+##
+-        while a > b \
+-            and c != d:
++        #Mutant#  while a > b \
++        #Mutant#      and c != d:
++        while ((a > b) and (c != d)):
++            if mutest_statement_reached() % 2 == 0: continue
