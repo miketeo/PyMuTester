@@ -33,7 +33,7 @@ def main():
     ostream.write('*************************\n')
 
     modules_map = { }
-    for module_name, module in sys.modules.iteritems():
+    for module_name, module in sys.modules.items():
         if hasattr(module, '__file__') and module.__file__:
             f = module.__file__
             if f.endswith('.pyc'):
@@ -42,7 +42,7 @@ def main():
 
     source_filenames = set()
     functions_tests_map = { }  # ( filename, function_name ) -> set(test_name)
-    for test_addr, function_calls in mutant_tracker.function_calls.iteritems():
+    for test_addr, function_calls in mutant_tracker.function_calls.items():
         for f_addr in function_calls.iterkeys():
             source_filenames.add(f_addr[0])
             functions_tests_map.setdefault(f_addr, set()).add(make_name(test_addr))
@@ -60,7 +60,7 @@ def main():
     dummy_plugin = DummyPlugin()
     has_live_mutants = False
     alive_mutants, killed_mutants, unreached_mutants = 0, 0, 0
-    for ( source_filename, function_name, function_lineno ), tests_set in functions_tests_map.iteritems():
+    for ( source_filename, function_name, function_lineno ), tests_set in functions_tests_map.items():
         function_names = source_function_names[source_filename]
         with open(source_filename, 'rU') as fh:
             source_lines = fh.readlines()

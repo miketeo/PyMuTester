@@ -5,6 +5,7 @@
 #
 from mock_modules import ConfigParser
 import StringIO
+import os
 import unittest
 import UserDict
 
@@ -191,7 +192,8 @@ class TestCaseBase(unittest.TestCase):
         self.assertEqual(cf.sections(), [],
                          "new ConfigParser should have no defined sections")
         self.assertFalse(cf.has_section("Foo"),
-                    "new ConfigParser should have no acknowledged sections")
+                         "new ConfigParser should have no acknowledged "
+                         "sections")
         self.assertRaises(ConfigParser.NoSectionError,
                           cf.options, "Foo")
         self.assertRaises(ConfigParser.NoSectionError,
@@ -360,8 +362,14 @@ class TestCaseBase(unittest.TestCase):
 
 class ConfigParserTestCase(TestCaseBase):
     config_class = ConfigParser.ConfigParser
+    allow_no_value = True
 
     def test_interpolation(self):
+        rawval = {
+            ConfigParser.ConfigParser: ("something %(with11)s "
+                                        "lots of interpolation (11 steps)"),
+            ConfigParser.SafeConfigParser: "%(with1)s",
+        }
         cf = self.get_interpolation_config()
         eq = self.assertEqual
         eq(cf.get("Foo", "getname"), "Foo")
@@ -395,6 +403,7 @@ class ConfigParserTestCase(TestCaseBase):
         cf.set('non-string', 'dict', {'pi': 3.14159, '%(': 1,
                                       '%(list)': '%(list)'})
         cf.set('non-string', 'string_with_interpolation', '%(list)s')
+        cf.set('non-string', 'no-value')
         self.assertEqual(cf.get('non-string', 'int', raw=True), 1)
         self.assertRaises(TypeError, cf.get, 'non-string', 'int')
         self.assertEqual(cf.get('non-string', 'list', raw=True),
@@ -407,7 +416,35 @@ class ConfigParserTestCase(TestCaseBase):
                                 raw=True), '%(list)s')
         self.assertRaises(ValueError, cf.get, 'non-string',
                           'string_with_interpolation', raw=False)
+        self.assertEqual(cf.get('non-string', 'no-value'), None)
 
+class MultilineValuesTestCase(TestCaseBase):
+    config_class = ConfigParser.ConfigParser
+    wonderful_spam = ("I'm having spam spam spam spam "
+                      "spam spam spam beaked beans spam "
+                      "spam spam and spam!").replace(' ', '\t\n')
+
+    def setUp(self):
+        cf = self.newconfig()
+        for i in range(100):
+            s = 'section{}'.format(i)
+            cf.add_section(s)
+            for j in range(10):
+                cf.set(s, 'lovely_spam{}'.format(j), self.wonderful_spam)
+        with open(test_support.TESTFN, 'w') as f:
+            cf.write(f)
+
+    def tearDown(self):
+        os.unlink(test_support.TESTFN)
+
+    def test_dominating_multiline_values(self):
+        # we're reading from file because this is where the code changed
+        # during performance updates in Python 3.2
+        cf_from_file = self.newconfig()
+        with open(test_support.TESTFN) as f:
+            cf_from_file.readfp(f)
+        self.assertEqual(cf_from_file.get('section8', 'lovely_spam4'),
+                         self.wonderful_spam.replace('\t\n', '\n'))
 
 class RawConfigParserTestCase(TestCaseBase):
     config_class = ConfigParser.RawConfigParser
@@ -497,6 +534,55 @@ class SafeConfigParserTestCase(ConfigParserTestCase):
 class SafeConfigParserTestCaseNoValue(SafeConfigParserTestCase):
     allow_no_value = True
 
+class TestChainMap(unittest.TestCase):
+    def test_issue_12717(self):
+        d1 = dict(red=1, green=2)
+        d2 = dict(green=3, blue=4)
+        dcomb = d2.copy()
+        dcomb.update(d1)
+        cm = ConfigParser._Chainmap(d1, d2)
+        self.assertIsInstance(cm.keys(), list)
+        self.assertEqual(set(cm.keys()), set(dcomb.keys()))      # keys()
+        self.assertEqual(set(cm.values()), set(dcomb.values()))  # values()
+        self.assertEqual(set(cm.items()), set(dcomb.items()))    # items()
+        self.assertEqual(set(cm), set(dcomb))                    # __iter__ ()
+        self.assertEqual(cm, dcomb)                              # __eq__()
+        self.assertEqual([cm[k] for k in dcomb], dcomb.values()) # __getitem__()
+        klist = 'red green blue black brown'.split()
+        self.assertEqual([cm.get(k, 10) for k in klist],
+                         [dcomb.get(k, 10) for k in klist])      # get()
+        self.assertEqual([k in cm for k in klist],
+                         [k in dcomb for k in klist])            # __contains__()
+        with test_support.check_py3k_warnings():
+            self.assertEqual([cm.has_key(k) for k in klist],
+                             [dcomb.has_key(k) for k in klist])  # has_key()
+
+class Issue7005TestCase(unittest.TestCase):
+    """Test output when None is set() as a value and allow_no_value == False.
+
+    http://bugs.python.org/issue7005
+
+    """
+
+    expected_output = "[section]\noption = None\n\n"
+
+    def prepare(self, config_class):
+        # This is the default, but that's the point.
+        cp = config_class(allow_no_value=False)
+        cp.add_section("section")
+        cp.set("section", "option", None)
+        sio = StringIO.StringIO()
+        cp.write(sio)
+        return sio.getvalue()
+
+    def test_none_as_value_stringified(self):
+        output = self.prepare(ConfigParser.ConfigParser)
+        self.assertEqual(output, self.expected_output)
+
+    def test_none_as_value_stringified_raw(self):
+        output = self.prepare(ConfigParser.RawConfigParser)
+        self.assertEqual(output, self.expected_output)
+
 
 class SortedTestCase(RawConfigParserTestCase):
     def newconfig(self, defaults=None):
@@ -513,23 +599,143 @@ class SortedTestCase(RawConfigParserTestCase):
                         "k=v\n")
         output = StringIO.StringIO()
         self.cf.write(output)
-        self.assertEquals(output.getvalue(),
-                          "[a]\n"
-                          "k = v\n\n"
-                          "[b]\n"
-                          "o1 = 4\n"
-                          "o2 = 3\n"
-                          "o3 = 2\n"
-                          "o4 = 1\n\n")
+        self.assertEqual(output.getvalue(),
+                         "[a]\n"
+                         "k = v\n\n"
+                         "[b]\n"
+                         "o1 = 4\n"
+                         "o2 = 3\n"
+                         "o3 = 2\n"
+                         "o4 = 1\n\n")
+
+
+class ExceptionPicklingTestCase(unittest.TestCase):
+    """Tests for issue #13760: ConfigParser exceptions are not picklable."""
+
+    def test_error(self):
+        import pickle
+        e1 = ConfigParser.Error('value')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_nosectionerror(self):
+        import pickle
+        e1 = ConfigParser.NoSectionError('section')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_nooptionerror(self):
+        import pickle
+        e1 = ConfigParser.NoOptionError('option', 'section')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(e1.option, e2.option)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_duplicatesectionerror(self):
+        import pickle
+        e1 = ConfigParser.DuplicateSectionError('section')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_interpolationerror(self):
+        import pickle
+        e1 = ConfigParser.InterpolationError('option', 'section', 'msg')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(e1.option, e2.option)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_interpolationmissingoptionerror(self):
+        import pickle
+        e1 = ConfigParser.InterpolationMissingOptionError('option', 'section',
+            'rawval', 'reference')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(e1.option, e2.option)
+        self.assertEqual(e1.reference, e2.reference)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_interpolationsyntaxerror(self):
+        import pickle
+        e1 = ConfigParser.InterpolationSyntaxError('option', 'section', 'msg')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(e1.option, e2.option)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_interpolationdeptherror(self):
+        import pickle
+        e1 = ConfigParser.InterpolationDepthError('option', 'section',
+            'rawval')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.section, e2.section)
+        self.assertEqual(e1.option, e2.option)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_parsingerror(self):
+        import pickle
+        e1 = ConfigParser.ParsingError('source')
+        e1.append(1, 'line1')
+        e1.append(2, 'line2')
+        e1.append(3, 'line3')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.filename, e2.filename)
+        self.assertEqual(e1.errors, e2.errors)
+        self.assertEqual(repr(e1), repr(e2))
+
+    def test_missingsectionheadererror(self):
+        import pickle
+        e1 = ConfigParser.MissingSectionHeaderError('filename', 123, 'line')
+        pickled = pickle.dumps(e1)
+        e2 = pickle.loads(pickled)
+        self.assertEqual(e1.message, e2.message)
+        self.assertEqual(e1.args, e2.args)
+        self.assertEqual(e1.line, e2.line)
+        self.assertEqual(e1.filename, e2.filename)
+        self.assertEqual(e1.lineno, e2.lineno)
+        self.assertEqual(repr(e1), repr(e2))
 
 
 def test_main():
     test_support.run_unittest(
         ConfigParserTestCase,
+        MultilineValuesTestCase,
         RawConfigParserTestCase,
         SafeConfigParserTestCase,
-        SortedTestCase,
         SafeConfigParserTestCaseNoValue,
+        SortedTestCase,
+        Issue7005TestCase,
+        TestChainMap,
+        ExceptionPicklingTestCase,
         )
 
 
